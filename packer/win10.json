@@ -1,0 +1,63 @@
+{
+		"builders": [{
+				"type": "hyperv-iso",
+				"iso_url": "e:/15063.0.170317-1834.RS2_RELEASE_CLIENTENTERPRISEEVAL_OEMRET_X64FRE_EN-US.ISO",
+				"iso_checksum": "0327731203F0C8AC0DFB607B7CFC5A91BA9A76CDC9A9852A8345A8B267D34F83",
+				"iso_checksum_type": "sha256",
+				"output_directory": "packer-win10-ent-x64",
+				"communicator": "winrm",
+				"winrm_username": "vagrant",
+				"winrm_password": "vagrant",
+				"winrm_timeout": "24h",
+
+				"cpu": 1,
+				"disk_size": 40000,
+				"ram_size": 4000,
+				"enable_dynamic_memory": true,
+				"generation": 1,
+				"vm_name": "win10-ent-x64",
+				"shutdown_command": "",
+				"shutdown_timeout": "15m",
+
+				"floppy_files": [
+					"answer_files/win10/autounattend.xml",
+					"scripts/disable-password-complexity.inf",
+					"scripts/postunattend.xml",
+					"scripts/win-build-toolkit.psm1",
+					"scripts/boxstarter.ps1",
+					"scripts/win-base-build.ps1",
+					"scripts/win-vagrant-build.ps1",
+					"scripts/win-install-updates.ps1",
+					"scripts/win-clean-image.ps1",
+					"scripts/win-choco-build.ps1",
+					"scripts/Disable-WindowsUpdateService.ps1",
+					"scripts/win-prepare-sysprep.ps1"
+				]
+		}],
+		"provisioners": [
+			{
+				"type": "powershell",
+				"scripts": [
+					"scripts/Disable-WindowsUpdateService.ps1",
+					"scripts/win-base-build.ps1",
+					"scripts/win-vagrant-build.ps1",
+					"scripts/win-clean-image.ps1"
+				]
+			},
+			{
+				"type": "windows-restart"
+			},
+			{
+				"type": "powershell",
+				"script": "scripts/win-prepare-sysprep.ps1"
+			}
+		],
+		"post-processors": [ 
+		{
+				"type": "vagrant",
+				"keep_input_artifact": true,
+				"output": "win10-ent-x64-trial-{{.Provider}}.box",
+				"vagrantfile_template": "vagrantfile-windows.template"
+	}
+]
+}

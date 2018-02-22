@@ -1,0 +1,37 @@
+{
+  "builders": [{
+    "type": "hyperv-iso",
+    "iso_url": "e:/Windows Server 2012 R2 x64 Trial - 9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+    "iso_checksum": "6612B5B1F53E845AACDF96E974BB119A3D9B4DCB5B82E65804AB7E534DC7B4D5",
+	"iso_checksum_type": "sha256",
+	"communicator": "winrm",
+	"winrm_username": "vagrant",
+	"winrm_password": "vagrant",
+	"winrm_timeout": "10h",
+
+	"cpu": 1,
+	"disk_size": 40000,
+	"ram_size": 4000,
+	"enable_dynamic_memory": true,
+	"generation": 1,
+	"vm_name": "win2012r2-dtc-x64",
+	"shutdown_command": "C:/windows/system32/sysprep/sysprep.exe /generalize /oobe /unattend:C:/Windows/Panther/Unattend/unattend.xml /quiet /shutdown",
+	"shutdown_timeout": "15m",
+
+	"floppy_files": [
+      "answerfiles/win2012r2/autounattend.xml",
+      "scripts/postunattend.xml",
+      "scripts/boxstarter.ps1",
+      "scripts/package.ps1",
+	  "scripts/Test-Command.ps1"
+    ]
+  }],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": true,
+      "output": "windows2012r2-dtc-x64-trial-{{.Provider}}.box",
+      "vagrantfile_template": "vagrantfile-windows.template"
+    }
+  ]
+}
