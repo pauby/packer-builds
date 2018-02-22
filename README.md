@@ -1,2 +1,2 @@
-# chocopackagetesting
-Chocolatey package testing scripts and tools
+# Packer Builds
+A collection of all the scripts and templates I use for my packer builds.
